@@ -6,5 +6,5 @@ from users import views
 app_name = "users"
 
 urlpatterns = [
-    path("register/", views.UserRegistrationAPIView.as_view(), name="create_user"),
+    path("list/", views.UserListAPIView.as_view(), name="user-list"),
 ]
