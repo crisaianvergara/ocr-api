@@ -20,7 +20,7 @@ class UserRegistrationAPIView(GenericAPIView):
     An endpoint for the client to create a new user.
     """
 
-    permission_classes = AllowAny
+    permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
 
     def post(self, request, *args, **kwargs):
@@ -38,7 +38,7 @@ class UserLoginAPIView(GenericAPIView):
     An endpoint to authenticate existing users using their email and password.
     """
 
-    permission_classes = AllowAny
+    permission_classes = (AllowAny,)
     serializer_class = UserLoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -57,7 +57,7 @@ class UserLogoutAPIView(GenericAPIView):
     An endpoint to logout user.
     """
 
-    permission_classes = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -74,7 +74,7 @@ class UserAPIView(RetrieveUpdateAPIView):
     An endpoint to get and update user information.
     """
 
-    permission_classes = IsAuthenticated
+    permission_classes = (IsAuthenticated,)
     serializer_class = CustomerUserSerializer
 
     def get_object(self):
@@ -86,7 +86,9 @@ class UserListAPIView(views.APIView):
     An endpoint to get users information.
     """
 
-    permission_classes = IsAuthenticated
+    # permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         users = User.objects.all()

@@ -6,5 +6,6 @@ from users import views
 app_name = "users"
 
 urlpatterns = [
+    path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path("list/", views.UserListAPIView.as_view(), name="user-list"),
 ]

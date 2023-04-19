@@ -31,6 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1"]
 
 ## added
+CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = ("http://localhost:3000/",)
 
 # Application definition
