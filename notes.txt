@@ -14,7 +14,10 @@ pip install django-cors-headers
 
 ## Install docTR
 pip install python-doctr
-pip install "python-doctr[tf]"
+pip install tensorflow==2.11.0
+pip install tf2onnx==1.13.0
+pip install tensorflow-addons==0.19.0
+pip install rapidfuzz==2.13.7
 
 ** Modify settings.py
 
@@ -23,9 +26,11 @@ pip install "python-doctr[tf]"
 2. models.py
 3. forms.py
 4. admin.py
-4. views.py
-5. urls.py
+5. serializers.py
+6. views.py
+7. urls.py
 
 ** Modify urls.py
 
 pip freeze > requirements.txt
+python.exe -m pip install --upgrade pip
