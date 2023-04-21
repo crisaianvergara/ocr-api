@@ -19,6 +19,12 @@ class ReceiptApiView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
+    def get_receipt(self, id):
+        try:
+            return Receipt.objects.get(pk=id)
+        except Receipt.DoesNotExist:
+            return None
+
     def get(self, request, *args, **kwargs):
         receipts = Receipt.objects.filter(status=1)
         serializer = ReceiptSerializer(receipts, many=True)
@@ -157,7 +163,7 @@ class ReceiptApiView(APIView):
 
         data = {
             "date": formatted_date,
-            "vendor": vendor,
+            "vendor": vendor.title(),
             "amount": amount,
             "tax": tax,
             "currency": currency,
@@ -169,3 +175,17 @@ class ReceiptApiView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, *args, **kwargs):
+        is_exist = self.get_receipt(pk)
+
+        if is_exist:
+            put_serializer = ReceiptSerializer(
+                instance=is_exist, data={"status": 0}, partial=True
+            )
+            if put_serializer.is_valid():
+                put_serializer.save()
+        return Response(
+            {"message": "Receipt successfully deleted!"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
