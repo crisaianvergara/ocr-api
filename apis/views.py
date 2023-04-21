@@ -162,7 +162,6 @@ class ReceiptApiView(APIView):
             "tax": tax,
             "currency": currency,
             "description": description,
-            "user": request.user.id,
         }
 
         serializer = ReceiptSerializer(data=data)
