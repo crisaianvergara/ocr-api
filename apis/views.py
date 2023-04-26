@@ -19,9 +19,9 @@ class ReceiptApiView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
-    def get_receipt(self, id):
+    def get_receipt(self, receipt_id):
         try:
-            return Receipt.objects.get(pk=id)
+            return Receipt.objects.get(pk=receipt_id)
         except Receipt.DoesNotExist:
             return None
 
@@ -71,6 +71,9 @@ class ReceiptApiView(APIView):
         # VENDOR
         new_result = [item for item in result if len(item) >= 2]
         vendor = new_result[0].translate(str.maketrans("", "", ".?"))
+
+        if vendor.title() == "Welcome To Best Buy 442":
+            vendor = "Best Buy 442"
 
         # TAX
         format_amount_and_tax = r"\d+\.\d+"
@@ -176,8 +179,24 @@ class ReceiptApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, *args, **kwargs):
-        is_exist = self.get_receipt(pk)
+    def put(self, request, receipt_id, *args, **kwargs):
+        receipt = self.get_receipt(receipt_id)
+        print(receipt_id)
+
+        if not receipt:
+            return Response(
+                {"message": "Receipt not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+        else:
+            serializer = ReceiptSerializer(receipt, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, receipt_id, *args, **kwargs):
+        is_exist = self.get_receipt(receipt_id)
 
         if is_exist:
             put_serializer = ReceiptSerializer(
